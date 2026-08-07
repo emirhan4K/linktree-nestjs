@@ -10,11 +10,16 @@ exports.LinksModule = void 0;
 const common_1 = require("@nestjs/common");
 const links_service_1 = require("./links.service");
 const links_controller_1 = require("./links.controller");
+const mongoose_1 = require("@nestjs/mongoose");
+const link_schema_1 = require("./link.schema");
 let LinksModule = class LinksModule {
 };
 exports.LinksModule = LinksModule;
 exports.LinksModule = LinksModule = __decorate([
     (0, common_1.Module)({
+        imports: [
+            mongoose_1.MongooseModule.forFeature([{ name: link_schema_1.Link.name, schema: link_schema_1.LinkSchema }])
+        ],
         controllers: [links_controller_1.LinksController],
         providers: [links_service_1.LinksService],
     })

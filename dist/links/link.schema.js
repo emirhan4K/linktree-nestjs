@@ -9,28 +9,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateLinkDto = void 0;
-const class_validator_1 = require("class-validator");
-class CreateLinkDto {
+exports.LinkSchema = exports.Link = void 0;
+const mongoose_1 = require("@nestjs/mongoose");
+const mongoose_2 = require("mongoose");
+let Link = class Link extends mongoose_2.Document {
     title;
     url;
     shortCode;
-}
-exports.CreateLinkDto = CreateLinkDto;
+    clickCount;
+};
+exports.Link = Link;
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
-], CreateLinkDto.prototype, "title", void 0);
+], Link.prototype, "title", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsUrl)(),
-    (0, class_validator_1.IsString)(),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
-], CreateLinkDto.prototype, "url", void 0);
+], Link.prototype, "url", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, mongoose_1.Prop)({ required: true, unique: true }),
     __metadata("design:type", String)
-], CreateLinkDto.prototype, "shortCode", void 0);
-//# sourceMappingURL=create-link.dto.js.map
+], Link.prototype, "shortCode", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: 0 }),
+    __metadata("design:type", Number)
+], Link.prototype, "clickCount", void 0);
+exports.Link = Link = __decorate([
+    (0, mongoose_1.Schema)({ timestamps: true })
+], Link);
+exports.LinkSchema = mongoose_1.SchemaFactory.createForClass(Link);
+//# sourceMappingURL=link.schema.js.map
