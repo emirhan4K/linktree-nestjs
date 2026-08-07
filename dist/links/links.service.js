@@ -34,6 +34,9 @@ let LinksService = class LinksService {
     remove(id) {
         return this.linkModel.deleteOne({ _id: id });
     }
+    update(id, updateLinkDto) {
+        return this.linkModel.updateOne({ _id: id }, updateLinkDto);
+    }
 };
 exports.LinksService = LinksService;
 exports.LinksService = LinksService = __decorate([

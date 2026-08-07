@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateLinkDto } from './dto/create-link.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { UpdateLinkDto } from './dto/update-link.dto';
 
 @Injectable()
 export class LinksService {
@@ -24,4 +25,7 @@ export class LinksService {
     return this.linkModel.deleteOne({ _id: id });
   }
 
+  update(id: string, updateLinkDto: UpdateLinkDto) {
+    return this.linkModel.updateOne({ _id: id }, updateLinkDto);
+  }
 }
