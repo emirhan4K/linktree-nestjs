@@ -1,26 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLinkDto } from './dto/create-link.dto';
-import { UpdateLinkDto } from './dto/update-link.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class LinksService {
+  constructor(@InjectModel('Link') private linkModel: Model<any>) {}
+
   create(createLinkDto: CreateLinkDto) {
-    return 'This action adds a new link';
+    const createdLink = new this.linkModel(createLinkDto);
+    return createdLink.save();
   }
 
   findAll() {
-    return `This action returns all links`;
+    return this.linkModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} link`;
+  findOne({shortCode}) {
+    return this.linkModel.findOne({ shortCode });
   }
 
-  update(id: number, updateLinkDto: UpdateLinkDto) {
-    return `This action updates a #${id} link`;
+  remove(id: string) {
+    return this.linkModel.deleteOne({ _id: id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} link`;
-  }
 }
