@@ -5,10 +5,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt'
+import { access } from 'fs';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel('User')private userModel:Model<any>){}
+  jwtService: any;
+  constructor(@InjectModel('User')private userModel:Model<any>,jwtService: JwtService){}
 
   async register(registerDto: RegisterDto){
    const existingUser = await this.userModel.findOne({email: registerDto.email})
@@ -33,7 +35,9 @@ export class AuthService {
     if(!isPasswordValid){
       throw new UnauthorizedException("E-posta veya şifre hatalı!")
     }
-    return {message:"Giriş başarıyla gerçekleşti"}
+    const payload = {sub: user._id, email: user.email}
+    const generatedCode = await this.jwtService.signAsync(payload)
+    return {access_token : generatedCode}
     
   }
 }
