@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LinksModule } from './links/links.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -17,6 +18,7 @@ import { LinksModule } from './links/links.module';
       }),
     }),
     LinksModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
