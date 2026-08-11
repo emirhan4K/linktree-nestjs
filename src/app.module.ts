@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LinksModule } from './links/links.module';
 import { AuthModule } from './auth/auth.module';
+import { MailService } from './mail/mail.service';
 
 
 @Module({
@@ -21,6 +22,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [MailService],
 })
 export class AppModule {}
