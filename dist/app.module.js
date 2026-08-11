@@ -12,6 +12,7 @@ const config_1 = require("@nestjs/config");
 const mongoose_1 = require("@nestjs/mongoose");
 const links_module_1 = require("./links/links.module");
 const auth_module_1 = require("./auth/auth.module");
+const mail_service_1 = require("./mail/mail.service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -32,7 +33,7 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
         ],
         controllers: [],
-        providers: [],
+        providers: [mail_service_1.MailService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

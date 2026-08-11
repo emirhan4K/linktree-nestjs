@@ -15,6 +15,7 @@ class RegisterDto {
     name;
     email;
     password;
+    passwordConfirm;
 }
 exports.RegisterDto = RegisterDto;
 __decorate([
@@ -31,7 +32,12 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(6),
+    (0, class_validator_1.MinLength)(6, { message: "Şifre en az 6 karakter olmalıdır" }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "password", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "passwordConfirm", void 0);
 //# sourceMappingURL=register-dto.js.map

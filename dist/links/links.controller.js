@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LinksController = void 0;
 const common_1 = require("@nestjs/common");
+const passport_1 = require("@nestjs/passport");
 const links_service_1 = require("./links.service");
 const create_link_dto_1 = require("./dto/create-link.dto");
 const update_link_dto_1 = require("./dto/update-link.dto");
@@ -40,6 +41,7 @@ let LinksController = class LinksController {
 };
 exports.LinksController = LinksController;
 __decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),

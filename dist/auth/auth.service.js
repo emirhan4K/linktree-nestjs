@@ -51,26 +51,35 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = __importStar(require("bcrypt"));
+const mail_service_1 = require("../mail/mail.service");
 let AuthService = class AuthService {
     userModel;
     jwtService;
-    constructor(userModel, jwtService) {
+    mailService;
+    constructor(userModel, jwtService, mailService) {
         this.userModel = userModel;
         this.jwtService = jwtService;
+        this.mailService = mailService;
     }
     async register(registerDto) {
+        if (registerDto.password != registerDto.passwordConfirm) {
+            throw new common_1.BadRequestException('Şifreler birbiriyle eşleşmiyor!');
+        }
         const existingUser = await this.userModel.findOne({ email: registerDto.email });
         if (existingUser) {
             throw new common_1.BadRequestException('Bu e-posta adresi zaten kullanımda!');
         }
         const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
         const newUser = new this.userModel({
             name: registerDto.name,
             email: registerDto.email,
-            password: hashedPassword
+            password: hashedPassword,
+            verificationCode: verificationCode
         });
         await newUser.save();
-        return { message: "Kayıt işlemi başarıyla tamamlandı." };
+        await this.mailService.sendVerificationEmail(registerDto.email, verificationCode);
+        return { message: 'Kayıt başarılı. Lütfen e-postanıza gönderilen kod ile hesabınızı doğrulayın.' };
     }
     async login(loginDto) {
         const user = await this.userModel.findOne({ email: loginDto.email });
@@ -90,6 +99,8 @@ exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)('User')),
-    __metadata("design:paramtypes", [mongoose_2.Model, jwt_1.JwtService])
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        jwt_1.JwtService,
+        mail_service_1.MailService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map
