@@ -11,18 +11,23 @@ export class AuthService {
   constructor(@InjectModel('User')private userModel:Model<any>,private jwtService: JwtService){}
 
   async register(registerDto: RegisterDto){
+     if(registerDto.password != registerDto.passwordConfirm){
+      throw new BadRequestException('Şifreler birbiriyle eşleşmiyor!')
+    }
    const existingUser = await this.userModel.findOne({email: registerDto.email})
     if(existingUser){
       throw new BadRequestException('Bu e-posta adresi zaten kullanımda!')
     }
     const hashedPassword = await bcrypt.hash(registerDto.password,10)
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
     const newUser = new this.userModel({
       name: registerDto.name,
       email: registerDto.email,
-      password:hashedPassword
+      password:hashedPassword,
+      verificationCode:verificationCode
     });
     await newUser.save();
-    return {message: "Kayıt işlemi başarıyla tamamlandı."}
+    return {message: 'Kayıt başarılı. Lütfen e-postanıza gönderilen kod ile hesabınızı doğrulayın.'}
   }
   async login(loginDto : LoginDto){
     const user = await this.userModel.findOne({email:loginDto.email})

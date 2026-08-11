@@ -13,8 +13,12 @@ export class RegisterDto {
 
     @IsNotEmpty()
     @IsString()
-    @MinLength(6)
+    @MinLength(6,{message: "Şifre en az 6 karakter olmalıdır"})
     password:string
+
+    @IsNotEmpty()
+    @IsString()
+    passwordConfirm:string
 }
 
 

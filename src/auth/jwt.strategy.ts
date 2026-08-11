@@ -12,6 +12,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) { //Token gerçek ve süresi dolmamışsa fonk otomatik çalışacak 
-    return {id: payload.sub, email: payload.email} //Payload içindeki verileri alıp dışarı obje olarak aktarıyoruz.
+    return {id: payload.sub, email: payload.email} //Payload içindeki verileri alıp dışarı  obje olarak aktarıyoruz.
   }
 }
