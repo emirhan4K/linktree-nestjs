@@ -5,10 +5,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt'
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel('User')private userModel:Model<any>,private jwtService: JwtService){}
+  constructor(@InjectModel('User')
+  private userModel:Model<any>,
+  private jwtService: JwtService,
+  private mailService: MailService){}
 
   async register(registerDto: RegisterDto){
      if(registerDto.password != registerDto.passwordConfirm){
@@ -27,6 +31,7 @@ export class AuthService {
       verificationCode:verificationCode
     });
     await newUser.save();
+    await this.mailService.sendVerificationEmail(registerDto.email,verificationCode)
     return {message: 'Kayıt başarılı. Lütfen e-postanıza gönderilen kod ile hesabınızı doğrulayın.'}
   }
   async login(loginDto : LoginDto){

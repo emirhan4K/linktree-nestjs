@@ -6,6 +6,7 @@ import { User, UserSchema } from './schema/user.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
+import { MailService } from 'src/mail/mail.service';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { JwtStrategy } from './jwt.strategy';
    PassportModule.register({defaultStrategy:'jwt'})
   ],
   controllers: [AuthController],
-  providers: [AuthService,JwtStrategy],
+  providers: [AuthService,JwtStrategy,MailService],
   exports:[JwtStrategy,PassportModule],
 })
 export class AuthModule {}
