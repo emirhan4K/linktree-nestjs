@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt'
 import { MailService } from 'src/mail/mail.service';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -47,5 +48,19 @@ export class AuthService {
     const generatedCode = await this.jwtService.signAsync(payload)
     return {access_token : generatedCode}
     
+  }
+  async forgotPassword(forgotPasswordDto:ForgotPasswordDto){
+    const user = await this.userModel.findOne({email:forgotPasswordDto.email})
+    if(!user){
+      throw new NotFoundException("Böyle bir kullanıcı bulunamadı!")
+    }
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const expireDate = new Date(Date.now() + 15 * 60 * 1000)
+
+    user.resetPasswordCode = resetCode;
+    user.resetPasswordExpires = expireDate;
+    await user.save();
+    await this.mailService.sendPasswordResetEmail(forgotPasswordDto.email,resetCode)
+    return {message : 'Şifre sıfırlama kodu başarıyla e-postanıza gönderildi.'};  
   }
 }
