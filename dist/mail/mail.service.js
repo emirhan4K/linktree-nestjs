@@ -71,6 +71,21 @@ let MailService = class MailService {
       `
         });
     }
+    async sendPasswordResetEmail(userEmail, code) {
+        await this.transporter.sendMail({
+            from: `"Linktree Destek" <${process.env.EMAIL_USER}>`,
+            to: userEmail,
+            subject: 'Linktree Şifre Sıfırlama',
+            html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+          <h2>Hoş Geldin!</h2>
+          <p>Şifre sıfırlama onay kodunuzu kullanabilirsin:</p>
+          <h1 style="color: #4CAF50; letter-spacing: 5px;">${code}</h1>
+          <p>Bu kodu kimseyle paylaşma.</p>
+        </div>
+      `
+        });
+    }
 };
 exports.MailService = MailService;
 exports.MailService = MailService = __decorate([

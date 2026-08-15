@@ -94,6 +94,19 @@ let AuthService = class AuthService {
         const generatedCode = await this.jwtService.signAsync(payload);
         return { access_token: generatedCode };
     }
+    async forgotPassword(forgotPasswordDto) {
+        const user = await this.userModel.findOne({ email: forgotPasswordDto.email });
+        if (!user) {
+            throw new common_1.NotFoundException("Böyle bir kullanıcı bulunamadı!");
+        }
+        const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const expireDate = new Date(Date.now() + 15 * 60 * 1000);
+        user.resetPasswordCode = resetCode;
+        user.resetPasswordExpires = expireDate;
+        await user.save();
+        await this.mailService.sendPasswordResetEmail(forgotPasswordDto.email, resetCode);
+        return { message: 'Şifre sıfırlama kodu başarıyla e-postanıza gönderildi.' };
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([

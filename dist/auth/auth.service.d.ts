@@ -3,6 +3,7 @@ import { LoginDto } from './dto/login-dto';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from "../mail/mail.service";
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 export declare class AuthService {
     private userModel;
     private jwtService;
@@ -13,5 +14,8 @@ export declare class AuthService {
     }>;
     login(loginDto: LoginDto): Promise<{
         access_token: string;
+    }>;
+    forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<{
+        message: string;
     }>;
 }
