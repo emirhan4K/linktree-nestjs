@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt'
 import { MailService } from 'src/mail/mail.service';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Injectable()
 export class AuthService {
@@ -86,5 +87,20 @@ export class AuthService {
     user.resetPasswordExpires = undefined;
     await user.save();
     return {message: "Şifreniz başarıyla değiştirildi."}
+  }
+  async verifyEmail(verifyEmailDto: VerifyEmailDto){
+    const user = await this.userModel.findOne({
+      email:verifyEmailDto.email,
+      verificationCode:verifyEmailDto.code,
+      verificationExpires: { $gt: new Date() }
+    })
+    if(!user){
+      throw new BadRequestException("Geçersiz veya süresi dolmuş kod!")
+    }
+    user.isVerified = true;
+    user.verificationCode = undefined;
+    user.verificationExpires = undefined;
+    await user.save();
+    return {message:"Hesabınız başarıyla doğrulandı."}
   }
 }

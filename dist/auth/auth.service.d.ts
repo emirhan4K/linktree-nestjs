@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { MailService } from "../mail/mail.service";
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 export declare class AuthService {
     private userModel;
     private jwtService;
@@ -20,6 +21,9 @@ export declare class AuthService {
         message: string;
     }>;
     resetPassword(resetPasswordDto: ResetPasswordDto): Promise<{
+        message: string;
+    }>;
+    verifyEmail(verifyEmailDto: VerifyEmailDto): Promise<{
         message: string;
     }>;
 }

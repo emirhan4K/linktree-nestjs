@@ -130,6 +130,21 @@ let AuthService = class AuthService {
         await user.save();
         return { message: "Şifreniz başarıyla değiştirildi." };
     }
+    async verifyEmail(verifyEmailDto) {
+        const user = await this.userModel.findOne({
+            email: verifyEmailDto.email,
+            verificationCode: verifyEmailDto.code,
+            verificationExpires: { $gt: new Date() }
+        });
+        if (!user) {
+            throw new common_1.BadRequestException("Geçersiz veya süresi dolmuş kod!");
+        }
+        user.isVerified = true;
+        user.verificationCode = undefined;
+        user.verificationExpires = undefined;
+        await user.save();
+        return { message: "Hesabınız başarıyla doğrulandı." };
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
