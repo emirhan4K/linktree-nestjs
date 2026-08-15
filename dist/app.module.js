@@ -27,6 +27,7 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService],
                 useFactory: async (configService) => ({
                     uri: configService.get('MONGO_URI'),
+                    family: 4
                 }),
             }),
             links_module_1.LinksModule,

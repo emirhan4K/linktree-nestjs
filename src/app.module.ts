@@ -16,7 +16,8 @@ import { MailService } from './mail/mail.service';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_URI'),
-      }),
+        family:4
+      }), 
     }),
     LinksModule,
     AuthModule,
