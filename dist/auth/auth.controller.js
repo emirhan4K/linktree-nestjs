@@ -18,6 +18,7 @@ const auth_service_1 = require("./auth.service");
 const register_dto_1 = require("./dto/register-dto");
 const login_dto_1 = require("./dto/login-dto");
 const forgot_password_dto_1 = require("./dto/forgot-password.dto");
+const reset_password_dto_1 = require("./dto/reset-password.dto");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -31,6 +32,9 @@ let AuthController = class AuthController {
     }
     forgotPassword(forgotPasswordDto) {
         return this.authService.forgotPassword(forgotPasswordDto);
+    }
+    resetPassword(resetPasswordDto) {
+        return this.authService.resetPassword(resetPasswordDto);
     }
 };
 exports.AuthController = AuthController;
@@ -55,6 +59,13 @@ __decorate([
     __metadata("design:paramtypes", [forgot_password_dto_1.ForgotPasswordDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "forgotPassword", null);
+__decorate([
+    (0, common_1.Post)('reset-password'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [reset_password_dto_1.ResetPasswordDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "resetPassword", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

@@ -95,6 +95,7 @@ let AuthService = class AuthService {
         return { access_token: generatedCode };
     }
     async forgotPassword(forgotPasswordDto) {
+        console.log("1. İstek geldi, e-posta aranıyor:", forgotPasswordDto.email);
         const user = await this.userModel.findOne({ email: forgotPasswordDto.email });
         if (!user) {
             throw new common_1.NotFoundException("Böyle bir kullanıcı bulunamadı!");
@@ -103,9 +104,31 @@ let AuthService = class AuthService {
         const expireDate = new Date(Date.now() + 15 * 60 * 1000);
         user.resetPasswordCode = resetCode;
         user.resetPasswordExpires = expireDate;
+        console.log("2. Kod üretildi, veritabanına kaydediliyor...");
         await user.save();
+        console.log("3. Veritabanı tamam, Nodemailer ile mail atılıyor...");
         await this.mailService.sendPasswordResetEmail(forgotPasswordDto.email, resetCode);
+        console.log("4. Mail başarıyla atıldı, işlem bitti!");
         return { message: 'Şifre sıfırlama kodu başarıyla e-postanıza gönderildi.' };
+    }
+    async resetPassword(resetPasswordDto) {
+        if (resetPasswordDto.newPassword != resetPasswordDto.newPasswordConfirm) {
+            throw new common_1.BadRequestException("Şifreler birbiriyle eşleşmiyor!");
+        }
+        const user = await this.userModel.findOne({
+            email: resetPasswordDto.email,
+            resetPasswordCode: resetPasswordDto.code,
+            resetPasswordExpires: { $gt: new Date() }
+        });
+        if (!user) {
+            throw new common_1.BadRequestException("Geçersiz veya süresi dolmuş kod!");
+        }
+        const newHashPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
+        user.password = newHashPassword;
+        user.resetPasswordCode = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+        return { message: "Şifreniz başarıyla değiştirildi." };
     }
 };
 exports.AuthService = AuthService;

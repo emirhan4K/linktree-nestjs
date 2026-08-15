@@ -62,15 +62,6 @@ export declare const UserSchema: import("mongoose").Schema<User, import("mongoos
     }, "id"> & import("mongoose").HydratedDocumentOverrides<{
         id: string;
     }>> | undefined;
-    isVerified?: import("mongoose").SchemaDefinitionProperty<boolean, User, Document<unknown, {}, User, {
-        id: string;
-    }, import("mongoose").DefaultSchemaOptions> & Omit<User & Required<{
-        _id: import("mongoose").Types.ObjectId;
-    }> & {
-        __v: number;
-    }, "id"> & import("mongoose").HydratedDocumentOverrides<{
-        id: string;
-    }>> | undefined;
     resetPasswordCode?: import("mongoose").SchemaDefinitionProperty<string, User, Document<unknown, {}, User, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<User & Required<{
@@ -81,6 +72,15 @@ export declare const UserSchema: import("mongoose").Schema<User, import("mongoos
         id: string;
     }>> | undefined;
     resetPasswordExpires?: import("mongoose").SchemaDefinitionProperty<Date, User, Document<unknown, {}, User, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<User & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    }, "id"> & import("mongoose").HydratedDocumentOverrides<{
+        id: string;
+    }>> | undefined;
+    isVerified?: import("mongoose").SchemaDefinitionProperty<boolean, User, Document<unknown, {}, User, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<User & Required<{
         _id: import("mongoose").Types.ObjectId;

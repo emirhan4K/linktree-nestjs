@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt'
 import { MailService } from 'src/mail/mail.service';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -50,6 +51,7 @@ export class AuthService {
     
   }
   async forgotPassword(forgotPasswordDto:ForgotPasswordDto){
+    console.log("1. İstek geldi, e-posta aranıyor:", forgotPasswordDto.email);
     const user = await this.userModel.findOne({email:forgotPasswordDto.email})
     if(!user){
       throw new NotFoundException("Böyle bir kullanıcı bulunamadı!")
@@ -59,8 +61,30 @@ export class AuthService {
 
     user.resetPasswordCode = resetCode;
     user.resetPasswordExpires = expireDate;
+    console.log("2. Kod üretildi, veritabanına kaydediliyor...");
     await user.save();
-    await this.mailService.sendPasswordResetEmail(forgotPasswordDto.email,resetCode)
+    console.log("3. Veritabanı tamam, Nodemailer ile mail atılıyor...");
+    await this.mailService.sendPasswordResetEmail(forgotPasswordDto.email,resetCode )
+    console.log("4. Mail başarıyla atıldı, işlem bitti!");
     return {message : 'Şifre sıfırlama kodu başarıyla e-postanıza gönderildi.'};  
+  }
+  async resetPassword(resetPasswordDto:ResetPasswordDto){
+    if(resetPasswordDto.newPassword != resetPasswordDto.newPasswordConfirm){
+      throw new BadRequestException("Şifreler birbiriyle eşleşmiyor!")
+    }
+    const user = await this.userModel.findOne({
+      email:resetPasswordDto.email,
+      resetPasswordCode:resetPasswordDto.code,
+      resetPasswordExpires:{$gt: new Date()}
+    })
+    if(!user){
+     throw new BadRequestException("Geçersiz veya süresi dolmuş kod!")
+    }
+    const newHashPassword = await bcrypt.hash(resetPasswordDto.newPassword,10)
+    user.password = newHashPassword;
+    user.resetPasswordCode = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+    return {message: "Şifreniz başarıyla değiştirildi."}
   }
 }
