@@ -103,11 +103,5 @@ export class AuthService {
     await user.save();
     return {message:"Hesabınız başarıyla doğrulandı."}
   }
-  async getProfile(userId:string){
-    const user = await this.userModel.findById(userId)
-    if(!user){
-      throw new NotFoundException('Kullanıcı bulunamadı!')
-    }
-    return user;
-  }
+
 }

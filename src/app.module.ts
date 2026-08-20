@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { LinksModule } from './links/links.module';
 import { AuthModule } from './auth/auth.module';
 import { MailService } from './mail/mail.service';
+import { UserModule } from './user/user.module';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { MailService } from './mail/mail.service';
     }),
     LinksModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [MailService],
