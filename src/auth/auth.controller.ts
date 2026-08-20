@@ -36,10 +36,5 @@ export class AuthController {
     return this.authService.verifyEmail(verifyEmailDto)
   }
 
- @UseGuards(JwtAuthGuard) 
-  @Get('me')
-  getProfile(@Req() req) {
-    return this.authService.getProfile(req.user.id); 
-  }
 
 }
