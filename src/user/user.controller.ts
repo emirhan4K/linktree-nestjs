@@ -21,7 +21,7 @@ export class UserController {
 
   @Get(':username')
   getUserByUsername(@Param('username')username:string){
-    return this.userService.getUserByUsername(username)
+    return this.userService.getUserByUsername(username);
   }
 
 }
